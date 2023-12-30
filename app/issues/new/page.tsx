@@ -11,11 +11,13 @@ import { createIssueSchema } from "@/app/validation-schemas.constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const {
@@ -39,10 +41,13 @@ const NewIssuePage = () => {
         className="max-w-xl space-y-3"
         onSubmit={handleSubmit(async (values) => {
           try {
+            setIsLoading(true);
             await axios.post("/api/issues", values);
             router.push("/issues");
           } catch (error) {
             setError("Something went wrong. Please try again later.");
+          } finally {
+            setIsLoading(false);
           }
         })}
       >
@@ -60,7 +65,9 @@ const NewIssuePage = () => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isLoading}>
+          Submit New Issue <Spinner isLoading={isLoading} />
+        </Button>
       </form>
     </div>
   );
