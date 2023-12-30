@@ -5,7 +5,7 @@ import { Theme } from "@radix-ui/themes";
 import "./globals.css";
 import "./theme-config.css";
 
-interface RootLayoutProps {
+interface Props {
   children: React.ReactNode;
 }
 
@@ -14,7 +14,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={inter.variable}>
