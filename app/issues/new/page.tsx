@@ -29,6 +29,18 @@ const NewIssuePage = () => {
     resolver: zodResolver(createIssueSchema),
   });
 
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      setIsLoading(true);
+      await axios.post("/api/issues", values);
+      router.push("/issues");
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  });
+
   return (
     <div className="max-w-xl space-y-3">
       {error && (
@@ -37,20 +49,7 @@ const NewIssuePage = () => {
         </Callout.Root>
       )}
 
-      <form
-        className="max-w-xl space-y-3"
-        onSubmit={handleSubmit(async (values) => {
-          try {
-            setIsLoading(true);
-            await axios.post("/api/issues", values);
-            router.push("/issues");
-          } catch (error) {
-            setError("Something went wrong. Please try again later.");
-          } finally {
-            setIsLoading(false);
-          }
-        })}
-      >
+      <form className="max-w-xl space-y-3" onSubmit={onSubmit}>
         <TextField.Root>
           <TextField.Input placeholder="Enter Title" {...register("title")} />
         </TextField.Root>
