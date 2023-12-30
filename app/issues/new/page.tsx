@@ -1,20 +1,67 @@
 "use client";
 
-import { TextField, Button } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { TextField, Button, Callout } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
+import { useForm, Controller } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
+import { useRouter } from "next/navigation";
+import { createIssueSchema } from "@/app/validation-schemas.constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
-<SimpleMDE />;
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
+  const [error, setError] = useState("");
+
+  const router = useRouter();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema),
+  });
+
   return (
     <div className="max-w-xl space-y-3">
-      <TextField.Root>
-        <TextField.Input placeholder="Enter Title" />
-      </TextField.Root>
-      <SimpleMDE placeholder="Enter Description" />
-      <Button>Submit New Issue</Button>
+      {error && (
+        <Callout.Root color="red">
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
+
+      <form
+        className="max-w-xl space-y-3"
+        onSubmit={handleSubmit(async (values) => {
+          try {
+            await axios.post("/api/issues", values);
+            router.push("/issues");
+          } catch (error) {
+            setError("Something went wrong. Please try again later.");
+          }
+        })}
+      >
+        <TextField.Root>
+          <TextField.Input placeholder="Enter Title" {...register("title")} />
+        </TextField.Root>
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <SimpleMDE placeholder="Enter Description" {...field} />
+          )}
+        />
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+
+        <Button>Submit New Issue</Button>
+      </form>
     </div>
   );
 };
