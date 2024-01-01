@@ -1,10 +1,9 @@
 "use client";
 
+import classnames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { SiPivotaltracker } from "react-icons/si";
-import classnames from "classnames";
 
 const NAVBAR_LINKS = [
   { href: "/", label: "Dashboard" },

@@ -1,5 +1,5 @@
 import { Table } from "@radix-ui/themes";
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
 const IssuesTable = ({ children }: PropsWithChildren) => {
   return (
