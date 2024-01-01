@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
-import axios from "axios";
-import { TextField, Button, Callout } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
-import { useForm, Controller } from "react-hook-form";
-import "easymde/dist/easymde.min.css";
-import { useRouter } from "next/navigation";
+import { ErrorMessage, Spinner } from "@/app/components";
 import { createIssueSchema } from "@/app/validation-schemas.constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, Callout, TextField } from "@radix-ui/themes";
+import axios from "axios";
+import "easymde/dist/easymde.min.css";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -42,7 +45,7 @@ const NewIssuePage = () => {
   });
 
   return (
-    <div className="max-w-xl space-y-3">
+    <Box className="max-w-xl space-y-3">
       {error && (
         <Callout.Root color="red">
           <Callout.Text>{error}</Callout.Text>
@@ -68,7 +71,7 @@ const NewIssuePage = () => {
           Submit New Issue <Spinner isLoading={isLoading} />
         </Button>
       </form>
-    </div>
+    </Box>
   );
 };
 
