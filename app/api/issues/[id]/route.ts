@@ -1,5 +1,5 @@
 import nextAuthOptions from "@/app/auth/authOptions";
-import { issueSchema } from "@/app/validation-schemas.constants";
+import { patchIssueSchema } from "@/app/validation-schemas.constants";
 import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,14 +16,25 @@ export const PATCH = async (req: NextRequest, { params }: Route) => {
   }
 
   const body = await req.json();
+  const { assignedUserId, title, description } = body;
 
-  const validation = issueSchema.safeParse(body);
+  if (assignedUserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: assignedUserId },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+  }
+
+  const validation = patchIssueSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(validation.error.format(), { status: 400 });
   }
 
-  const issue = await prisma.issues.findUnique({
+  const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
 
@@ -31,9 +42,9 @@ export const PATCH = async (req: NextRequest, { params }: Route) => {
     return NextResponse.json({ error: "Issue not found" }, { status: 404 });
   }
 
-  const updatedIssue = await prisma.issues.update({
+  const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
-    data: { title: body.title, description: body.description },
+    data: { title, description, assignedUserId },
   });
 
   return NextResponse.json(updatedIssue, { status: 201 });
@@ -46,7 +57,7 @@ export const DELETE = async (_req: NextRequest, { params }: Route) => {
     return NextResponse.json("Unauthorized", { status: 401 });
   }
 
-  const issue = await prisma.issues.findUnique({
+  const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
 
@@ -54,7 +65,7 @@ export const DELETE = async (_req: NextRequest, { params }: Route) => {
     return NextResponse.json({ error: "Issue not found" }, { status: 404 });
   }
 
-  await prisma.issues.delete({ where: { id: issue.id } });
+  await prisma.issue.delete({ where: { id: issue.id } });
 
   return NextResponse.json({ success: true }, { status: 200 });
 };
