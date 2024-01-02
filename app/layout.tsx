@@ -1,4 +1,4 @@
-import { Theme } from "@radix-ui/themes";
+import { Container, Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { Inter } from "next/font/google";
 import NavBar from "./NavBar";
@@ -18,11 +18,13 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Theme accentColor="ruby" radius="large" suppressHydrationWarning>
+        <Theme accentColor="indigo" radius="large" suppressHydrationWarning>
           <header>
             <NavBar />
           </header>
-          <main className="p-6">{children}</main>
+          <main className="p-6">
+            <Container>{children}</Container>
+          </main>
         </Theme>
       </body>
     </html>
