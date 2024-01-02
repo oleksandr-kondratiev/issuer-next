@@ -3,7 +3,7 @@
 import { ErrorMessage, Spinner } from "@/app/components";
 import { issueSchema } from "@/app/validation-schemas.constants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Issues } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { Box, Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
@@ -16,7 +16,7 @@ import { z } from "zod";
 type IssueFormValues = z.infer<typeof issueSchema>;
 
 interface Props {
-  issue?: Issues;
+  issue?: Issue;
 }
 
 const IssueForm = ({ issue }: Props) => {

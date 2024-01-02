@@ -1,6 +1,7 @@
 import prisma from "@/prisma/client";
 import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
+import AssigneeSelect from "./AssigneeSelect";
 import DeleteIssue from "./DeleteIssue";
 import EditIssue from "./EditIssue";
 import IssueDetails from "./IssueDetails";
@@ -16,7 +17,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
     notFound();
   }
 
-  const issue = await prisma.issues.findUnique({ where: { id } });
+  const issue = await prisma.issue.findUnique({ where: { id } });
 
   if (!issue) {
     notFound();
@@ -29,6 +30,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
       </Box>
       <Box>
         <Flex direction="column" gap="4">
+          <AssigneeSelect issue={issue} />
           <EditIssue issueId={issue.id} />
           <DeleteIssue issueId={issue.id} />
         </Flex>
