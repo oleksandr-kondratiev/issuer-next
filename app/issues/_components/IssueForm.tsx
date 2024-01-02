@@ -34,9 +34,9 @@ const IssueForm = ({ issue }: Props) => {
   });
 
   const onSubmit = handleSubmit(async (values) => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
+    try {
       if (issue) {
         await axios.patch(`/api/issues/${issue.id}`, values);
         router.push(`/issues/${issue.id}`);

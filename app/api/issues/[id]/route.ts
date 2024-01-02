@@ -30,3 +30,17 @@ export const PATCH = async (req: NextRequest, { params }: Route) => {
 
   return NextResponse.json(updatedIssue, { status: 201 });
 };
+
+export const DELETE = async (_req: NextRequest, { params }: Route) => {
+  const issue = await prisma.issues.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!issue) {
+    return NextResponse.json({ error: "Issue not found" }, { status: 404 });
+  }
+
+  await prisma.issues.delete({ where: { id: issue.id } });
+
+  return NextResponse.json({ success: true }, { status: 200 });
+};
