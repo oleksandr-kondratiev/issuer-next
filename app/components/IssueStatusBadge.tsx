@@ -1,3 +1,4 @@
+import { normalizeString } from "@/app/helpers/string.helpers";
 import { Status } from "@prisma/client";
 import { Badge } from "@radix-ui/themes";
 
@@ -16,14 +17,6 @@ const getBadgeColor = (status: Status): BadgeColor => {
     case "DONE":
       return "green";
   }
-};
-
-const normalizeString = (string: string) => {
-  return string
-    .split("_")
-    .map((word) => word.toLowerCase())
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
 };
 
 const IssueStatusBadge = ({ status }: Props) => {

@@ -13,7 +13,7 @@ const IssueDetails = ({ issue }: Props) => {
       <Heading as="h2">{issue.title}</Heading>
       <Flex gap="3" my="3">
         <IssueStatusBadge status={issue.status} />
-        <Text>{issue.createdAt.toLocaleDateString()}</Text>
+        <Text>{issue.createdAt.toLocaleString()}</Text>
       </Flex>
       <Card className="prose max-w-full" mt="4">
         <ReactMarkdown>{issue.description}</ReactMarkdown>
