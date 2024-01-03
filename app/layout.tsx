@@ -24,7 +24,6 @@ export default function RootLayout({ children }: Props) {
           <SWRProvider>
             <Theme
               accentColor="indigo"
-              radius="large"
               suppressHydrationWarning
               appearance="light"
             >
