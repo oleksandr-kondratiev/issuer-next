@@ -2,10 +2,11 @@ import Link from "@/app/components/Link";
 import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
+import { Metadata } from "next";
+import { Pagination } from "../components";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import IssuesActions from "./IssuesActions";
 import IssuesTable from "./IssuesTable";
-import { Pagination } from "../components";
 
 interface IssueListParams extends Record<string, unknown> {
   status: Status;
@@ -15,6 +16,11 @@ interface IssueListParams extends Record<string, unknown> {
 interface Props {
   searchParams: IssueListParams;
 }
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - View all issues",
+  description: "Issue Tracker Dashboard. Track your issues easily.",
+};
 
 const IssuesPage = async ({ searchParams }: Props) => {
   const statuses = Object.values(Status);

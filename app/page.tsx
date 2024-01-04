@@ -1,5 +1,6 @@
 import prisma from "@/prisma/client";
 import { Flex, Grid, Skeleton } from "@radix-ui/themes";
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 const IssueSummary = dynamic(() => import("./IssueSummary"), {
@@ -16,6 +17,11 @@ const LatestIssues = dynamic(() => import("./LatestIssues"), {
   ssr: false,
   loading: () => <Skeleton className="h-96" />,
 });
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - Dashboard",
+  description: "Issue Tracker Dashboard. Track your issues easily.",
+};
 
 const DashboardPage = async () => {
   const open = await prisma.issue.count({ where: { status: "OPEN" } });
