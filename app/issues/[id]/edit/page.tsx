@@ -8,6 +8,17 @@ const IssueForm = dynamic(() => import("../../_components/IssueForm"), {
   loading: () => <IssueFormSkeleton />,
 });
 
+export const generateMetadata = async ({ params }: Props) => {
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  return {
+    title: `Issue Tracker - Edit ${issue?.title}`,
+    description: issue?.description,
+  };
+};
+
 interface Props {
   params: { id: string };
 }
