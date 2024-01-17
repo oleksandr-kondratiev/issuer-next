@@ -3,7 +3,6 @@
 import { Issue } from "@prisma/client";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu } from "@radix-ui/themes";
-import { usePathname } from "next/navigation";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -15,11 +14,7 @@ interface Props {
 }
 
 const ShareIssue = ({ issue }: Props) => {
-  const pathname = usePathname();
-
-  const shareUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}${pathname}`
-    : `http://localhost:3000${pathname}`;
+  const shareUrl = window.location.href || "";
 
   const title = `Get more information about the issue${
     issue?.title ? ` - ${issue.title}` : ""
