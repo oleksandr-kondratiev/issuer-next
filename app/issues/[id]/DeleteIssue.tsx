@@ -1,6 +1,7 @@
 "use client";
 
 import { Spinner } from "@/app/components";
+import { TrashIcon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Callout, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -44,6 +45,7 @@ const DeleteIssue = ({ issueId }: Props) => {
   return (
     <>
       <Button color="red" onClick={openModal}>
+        <TrashIcon />
         Delete Issue
       </Button>
       <AlertDialog.Root open={isOpen}>
