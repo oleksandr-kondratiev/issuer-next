@@ -1,7 +1,6 @@
 "use client";
 
-import { Issue } from "@prisma/client";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { Share2Icon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu } from "@radix-ui/themes";
 import {
   FacebookShareButton,
@@ -9,22 +8,15 @@ import {
   TwitterShareButton,
 } from "react-share";
 
-interface Props {
-  issue: Issue;
-}
-
-const ShareIssue = ({ issue }: Props) => {
+const ShareIssue = () => {
   const shareUrl = window.location.href || "";
-
-  const title = `Get more information about the issue${
-    issue?.title ? ` - ${issue.title}` : ""
-  }`;
+  const title = "Get more information about the issue";
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button variant="soft">
-          <CaretDownIcon />
+        <Button variant="outline">
+          <Share2Icon />
           Share via
         </Button>
       </DropdownMenu.Trigger>

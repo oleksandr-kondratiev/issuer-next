@@ -7,7 +7,6 @@ import EditIssue from "./EditIssue";
 import IssueDetails from "./IssueDetails";
 import ShareIssue from "./ShareIssue";
 import { cache } from "react";
-import Head from "next/head";
 
 interface Props {
   params: { id: string };
@@ -46,7 +45,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
             </Text>
             <EditIssue issueId={issue.id} />
             <DeleteIssue issueId={issue.id} />
-            <ShareIssue issue={issue} />
+            <ShareIssue />
           </Flex>
         </Flex>
       </Box>
@@ -61,19 +60,9 @@ export const generateMetadata = async ({ params }: Props) => {
     title: `Issue Tracker - ${issue?.title}`,
     description: issue?.description,
     openGraph: {
-      title: `Issue Tracker - ${issue?.title}`,
-      description: issue?.description,
-      type: "website",
-      url: `https://issuer-next.vercel.app/issues/${issue?.id}`,
-      images: [
-        {
-          url: "https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg",
-          width: 1200,
-          height: 630,
-          alt: "Issue Tracker",
-        },
-      ],
+      images: [{ url: "https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg" }],
     },
+    metadataBase: new URL("https://issuer-next.vercel.app/"),
   };
 };
 
