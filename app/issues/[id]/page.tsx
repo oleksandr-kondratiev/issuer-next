@@ -1,26 +1,21 @@
 import prisma from "@/prisma/client";
-import { Box, Flex, Grid } from "@radix-ui/themes";
-import { Metadata } from "next";
+import { Box, Flex, Grid, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import AssigneeSelect from "./AssigneeSelect";
 import DeleteIssue from "./DeleteIssue";
 import EditIssue from "./EditIssue";
 import IssueDetails from "./IssueDetails";
+import ShareIssue from "./ShareIssue";
+import { cache } from "react";
+import Head from "next/head";
 
 interface Props {
   params: { id: string };
 }
 
-export const generateMetadata = async ({ params }: Props) => {
-  const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
-  });
-
-  return {
-    title: `Issue Tracker - ${issue?.title}`,
-    description: issue?.description,
-  };
-};
+const fetchUser = cache(async (issueId: number) =>
+  prisma.issue.findUnique({ where: { id: issueId } })
+);
 
 const IssueDetailsPage = async ({ params }: Props) => {
   const id = parseInt(params.id);
@@ -29,7 +24,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
     notFound();
   }
 
-  const issue = await prisma.issue.findUnique({ where: { id } });
+  const issue = await fetchUser(id);
 
   if (!issue) {
     notFound();
@@ -42,12 +37,62 @@ const IssueDetailsPage = async ({ params }: Props) => {
       </Box>
       <Box>
         <Flex direction="column" gap="4">
-          <AssigneeSelect issue={issue} />
-          <EditIssue issueId={issue.id} />
-          <DeleteIssue issueId={issue.id} />
+          <Flex direction="column" gap="2">
+            <AssigneeSelect issue={issue} />
+          </Flex>
+          <Flex direction="column" gap="2">
+            <Text as="p" size="2">
+              Actions:
+            </Text>
+            <EditIssue issueId={issue.id} />
+            <DeleteIssue issueId={issue.id} />
+            <ShareIssue issue={issue} />
+          </Flex>
         </Flex>
       </Box>
     </Grid>
+  );
+};
+
+export const generateMetadata = async ({ params }: Props) => {
+  const issue = await fetchUser(parseInt(params.id));
+
+  return (
+    <>
+      <Head>
+        <title>{`Issue Tracker - ${issue?.title}`}</title>
+        <meta name="description" content={issue?.description} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`Issue Tracker - ${issue?.title}`} />
+        <meta property="og:description" content={issue?.description} />
+        <meta
+          property="og:image"
+          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
+        />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:title"
+          content={`Issue Tracker - ${issue?.title}`}
+        />
+        <meta property="twitter:description" content={issue?.description} />
+        <meta
+          property="twitter:image"
+          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
+        />
+
+        {/* LinkedIn */}
+        <meta property="og:title" content={`Issue Tracker - ${issue?.title}`} />
+        <meta
+          property="og:image"
+          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
+        />
+        <meta property="og:description" content={issue?.description} />
+      </Head>
+    </>
   );
 };
 
