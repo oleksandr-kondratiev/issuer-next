@@ -2,7 +2,7 @@
 
 import { ErrorMessage } from "@/app/components";
 import { Issue, User } from "@prisma/client";
-import { Select } from "@radix-ui/themes";
+import { Select, Text } from "@radix-ui/themes";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import useSWR from "swr";
@@ -45,6 +45,9 @@ const AssigneeSelect = ({ issue }: Props) => {
 
   return (
     <>
+      <Text as="p" size="2">
+        Assigned user:
+      </Text>
       <Select.Root
         disabled={!!error || isLoading}
         defaultValue={issue.assignedUserId || "null"}
