@@ -57,43 +57,24 @@ const IssueDetailsPage = async ({ params }: Props) => {
 export const generateMetadata = async ({ params }: Props) => {
   const issue = await fetchUser(parseInt(params.id));
 
-  return (
-    <>
-      <Head>
-        <title>{`Issue Tracker - ${issue?.title}`}</title>
-        <meta name="description" content={issue?.description} />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={`Issue Tracker - ${issue?.title}`} />
-        <meta property="og:description" content={issue?.description} />
-        <meta
-          property="og:image"
-          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
-        />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta
-          property="twitter:title"
-          content={`Issue Tracker - ${issue?.title}`}
-        />
-        <meta property="twitter:description" content={issue?.description} />
-        <meta
-          property="twitter:image"
-          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
-        />
-
-        {/* LinkedIn */}
-        <meta property="og:title" content={`Issue Tracker - ${issue?.title}`} />
-        <meta
-          property="og:image"
-          content="https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg"
-        />
-        <meta property="og:description" content={issue?.description} />
-      </Head>
-    </>
-  );
+  return {
+    title: `Issue Tracker - ${issue?.title}`,
+    description: issue?.description,
+    openGraph: {
+      title: `Issue Tracker - ${issue?.title}`,
+      description: issue?.description,
+      type: "website",
+      url: `https://issuer-next.vercel.app/issues/${issue?.id}`,
+      images: [
+        {
+          url: "https://i.ytimg.com/vi/wnXA7rp8KJ4/maxresdefault.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Issue Tracker",
+        },
+      ],
+    },
+  };
 };
 
 export default IssueDetailsPage;
