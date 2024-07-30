@@ -7,6 +7,7 @@ import EditIssue from "./EditIssue";
 import IssueDetails from "./IssueDetails";
 import ShareIssue from "./ShareIssue";
 import { cache } from "react";
+import axios from "axios";
 
 interface Props {
   params: { id: string };
@@ -15,6 +16,23 @@ interface Props {
 const fetchUser = cache(async (issueId: number) =>
   prisma.issue.findUnique({ where: { id: issueId } })
 );
+
+// const setVisited = async (issueId: number) => {
+//   const url = `/api/issues/${issueId}/visited`;
+//   const body = { lastVisited: new Date().toISOString() };
+
+//   if (typeof window !== "undefined" && navigator.sendBeacon) {
+//     navigator.sendBeacon(url, JSON.stringify(body));
+
+//     return;
+//   }
+
+//   try {
+//     await axios.post(url, body);
+//   } catch (error) {
+//     console.error("Failed to set visited", error);
+//   }
+// }
 
 const IssueDetailsPage = async ({ params }: Props) => {
   const id = parseInt(params.id);
