@@ -7,13 +7,17 @@ import EditIssue from "./EditIssue";
 import IssueDetails from "./IssueDetails";
 import ShareIssue from "./ShareIssue";
 import { cache } from "react";
+import DownloadIssue from "./DownloadIssue";
 
 interface Props {
   params: { id: string };
 }
 
-const fetchUser = cache(async (issueId: number) =>
-  prisma.issue.findUnique({ where: { id: issueId } })
+const fetchIssue = cache(async (issueId: number) =>
+  prisma.issue.findUnique({
+    where: { id: issueId },
+    include: { assignedUser: true },
+  })
 );
 
 const IssueDetailsPage = async ({ params }: Props) => {
@@ -23,7 +27,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
     notFound();
   }
 
-  const issue = await fetchUser(id);
+  const issue = await fetchIssue(id);
 
   if (!issue) {
     notFound();
@@ -44,8 +48,9 @@ const IssueDetailsPage = async ({ params }: Props) => {
               Actions:
             </Text>
             <EditIssue issueId={issue.id} />
-            <DeleteIssue issueId={issue.id} />
+            <DownloadIssue issue={issue} />
             <ShareIssue />
+            <DeleteIssue issueId={issue.id} />
           </Flex>
         </Flex>
       </Box>
@@ -54,7 +59,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
 };
 
 export const generateMetadata = async ({ params }: Props) => {
-  const issue = await fetchUser(parseInt(params.id));
+  const issue = await fetchIssue(parseInt(params.id));
 
   return {
     title: `Issue Tracker - ${issue?.title}`,

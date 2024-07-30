@@ -7,7 +7,7 @@ const ErrorMessage = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <Text as="p" size={"2"} color="red">
+    <Text as="p" size="2" color="red">
       {children}
     </Text>
   );

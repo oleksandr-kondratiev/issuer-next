@@ -2,6 +2,7 @@
 
 import { Share2Icon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu } from "@radix-ui/themes";
+import { usePathname } from "next/navigation";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -9,7 +10,9 @@ import {
 } from "react-share";
 
 const ShareIssue = () => {
-  const shareUrl = window.location.href || "";
+  const pathname = usePathname();
+
+  const shareUrl = `${process.env.NEXT_APP_URL}${pathname}`;
   const title = "Get more information about the issue";
 
   return (
